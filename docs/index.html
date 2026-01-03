@@ -24,10 +24,10 @@
     }
 
     .wrap {
-      max-width: 720px;
-      padding: 96px 24px;
-      margin: auto;
+        position: relative;
+        z-index: 1;
     }
+
 
     h1 {
       font-size: 40px;
@@ -90,6 +90,59 @@
       color: var(--text);
       overflow-x: auto;
     }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask-image: radial-gradient(circle at top, black 30%, transparent 75%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .wrap > * {
+        animation: fadeUp 0.6s ease forwards;
+        opacity: 0;
+    }
+
+    .wrap > *:nth-child(1) { animation-delay: 0.05s; }
+    .wrap > *:nth-child(2) { animation-delay: 0.1s; }
+    .wrap > *:nth-child(3) { animation-delay: 0.15s; }
+    .wrap > *:nth-child(4) { animation-delay: 0.2s; }
+    .wrap > *:nth-child(5) { animation-delay: 0.25s; }
+
+    .screenshot {
+        margin-top: 24px;
+        background: linear-gradient(180deg, #111528, #0c1020);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 12px;
+        box-shadow:
+            0 0 0 1px rgba(255,255,255,0.02),
+            0 20px 60px rgba(0,0,0,0.6);
+        }
+
+    .screenshot img {
+        width: 100%;
+        border-radius: 10px;
+        display: block;
+    }
+
   </style>
 </head>
 
@@ -124,6 +177,14 @@
         <li>Focused, minimal interface</li>
       </ul>
     </section>
+
+    <section>
+        <h2>Preview</h2>
+        <div class="screenshot">
+            <img src="./flux-preview.png" alt="Flux Browser preview" />
+        </div>
+    </section>
+
 
     <section>
       <h2>Status</h2>
