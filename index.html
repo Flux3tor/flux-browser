@@ -101,6 +101,10 @@
       const tabsBar = document.getElementById("tabs");
       const views = document.getElementById("views");
       const urlInput = document.getElementById("url");
+      
+      urlInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") navigate();
+      });
 
       let tabs = [];
       let activeTab = null;
