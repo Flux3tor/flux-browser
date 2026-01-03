@@ -1,16 +1,48 @@
 # Flux Browser
 
-Flux is a lightweight Chromium-based desktop browser built with Electron.
+Flux is an experimental Chromium-based desktop browser built with Electron.
 
-This project is mainly for learning how real browsers work under the hood —
-from window creation to web rendering and navigation control.
+The project exists to explore how browsers behave under the hood and how small UI
+and system-level decisions affect usability, performance, and interaction flow.
+Rather than focusing on features for end users, Flux is built as a learning and
+iteration-driven system.
 
-## Current features
-- Native desktop window
-- Chromium webview rendering
-- Address bar with navigation
-- Back / forward / reload
-- URL syncing (works with SPA sites like YouTube)
+This is not a Chrome replacement — it’s a hands-on exploration of browser internals,
+UI structure, and navigation behavior.
+
+---
+
+## Features
+
+- Native desktop application (Electron)
+- Real Chromium web rendering via `webview`
+- Custom browser UI (address bar, navigation controls)
+- Multi-tab browsing
+- Tab closing with smart fallback
+- Drag-and-drop tab reordering
+- URL syncing (including SPA navigation like YouTube)
+
+---
 
 ## Status
-Early development. Tabs and more features coming soon.
+
+Flux is currently a **developer preview**.
+
+There is no packaged installer yet. The browser runs locally via Electron and is
+actively being iterated on as features and UX improve.
+
+Planned next:
+- Incognito / private mode
+- Content blocking (ads / trackers)
+- Visual polish and theming
+- Packaging for distribution
+
+---
+
+## Try it locally
+
+```bash
+git clone https://github.com/flux3tor/flux-browser.git
+cd flux-browser
+npm install
+npm start
