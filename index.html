@@ -91,6 +91,7 @@
 
     <div id="tabs">
       <button onclick="newTab()">+</button>
+      <button onclick="newTab('https://www.google.com', true)">🕵️</button>
     </div>
 
     <div id="toolbar">
@@ -107,7 +108,8 @@
       const tabsBar = document.getElementById("tabs");
       const views = document.getElementById("views");
       const urlInput = document.getElementById("url");
-      
+      const FIXED_TAB_BUTTONS = 2; // + and incognito
+
       urlInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") navigate();
       });
@@ -115,12 +117,17 @@
       let tabs = [];
       let activeTab = null;
 
-      function newTab(url = "https://www.google.com") {
+      function newTab(url = "https://www.google.com", incognito = false) {
         const tabId = Date.now();
 
         const tabBtn = document.createElement("div");
         tabBtn.className = "tab";
         tabBtn.draggable = true;
+
+        if (incognito) {
+          tabBtn.style.opacity = "0.8";
+          tabBtn.style.border = "1px dashed rgba(139,92,246,0.4)";
+        }
 
         const titleSpan = document.createElement("span");
         titleSpan.textContent = "New Tab";
@@ -138,8 +145,16 @@
 
         tabBtn.appendChild(titleSpan);
         tabBtn.appendChild(closeBtn);
+        
+        const webview = document.createElement("webview");
 
-        const webview= document.createElement("webview");
+        if (incognito) {
+          webview.setAttribute(
+            "partition",
+            "persist:incognito-" + tabId
+          );
+        }
+
         webview.src = url;
 
         webview.addEventListener("page-title-updated", (e) => {
@@ -235,25 +250,26 @@
       tabsBar.addEventListener("dragover", (e) => {
         e.preventDefault();
 
-        const targetTab = e.target.closest(".tab");
-        if (!targetTab || draggedTabId === null) return;
+        const targetTabEl = e.target.closest(".tab");
+        if (!targetTabEl || draggedTabId === null) return;
 
-        const draggedTab = tabs.find(t => t.id === draggedTabId);
-        const targetIndex = tabs.findIndex(t => t.tabBtn === targetTab);
         const draggedIndex = tabs.findIndex(t => t.id === draggedTabId);
+        const targetIndex = tabs.findIndex(t => t.tabBtn === targetTabEl);
 
+        if (draggedIndex === -1 || targetIndex === -1) return;
         if (draggedIndex === targetIndex) return;
 
-        // Reorder Array
-        tabs.splice(draggedIndex, 1);
+        // Reorder internal state
+        const draggedTab = tabs.splice(draggedIndex, 1)[0];
         tabs.splice(targetIndex, 0, draggedTab);
 
-        // Reorder DOM
-        tabsBar.insertBefore(
-          draggedTab.tabBtn,
-          tabsBar.children[targetIndex + 1] // +1 because "+" button exists
-        );
+        // Reorder DOM — ALWAYS after fixed buttons
+        const referenceNode =
+          tabsBar.children[targetIndex + FIXED_TAB_BUTTONS];
+
+        tabsBar.insertBefore(draggedTab.tabBtn, referenceNode || null);
       });
+
 
       newTab();
     </script>
