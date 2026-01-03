@@ -1,59 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Flux Browser – Demo</title>
+  <title>Flux Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
+    :root {
+      --bg: #0b0e14;
+      --panel: #111528;
+      --text: #e6e8ee;
+      --muted: #9aa1b2;
+      --accent: #8b5cf6;
+      --border: rgba(255,255,255,0.06);
+    }
+
     body {
-      font-family: system-ui, sans-serif;
-      background: #0f0f14;
-      color: white;
-      padding: 40px;
-      max-width: 700px;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 720px;
+      padding: 96px 24px;
       margin: auto;
     }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .tag {
+      padding: 4px 10px;
+      font-size: 13px;
+      border-radius: 999px;
+      background: rgba(139,92,246,0.15);
+      color: var(--accent);
+    }
+
+    section {
+      margin-top: 48px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    p {
+      color: var(--muted);
+    }
+
+    ul {
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
     a {
-      color: #8b5cf6;
+      color: var(--accent);
       text-decoration: none;
     }
+
     .box {
-      background: #16161d;
-      padding: 20px;
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      margin-top: 20px;
+      font-family: monospace;
+      font-size: 14px;
+      color: var(--text);
+      overflow-x: auto;
     }
   </style>
 </head>
-<body>
-  <h1>Flux Browser</h1>
-  <p>
-    Flux is a lightweight Chromium-based desktop browser built with Electron.
-    This is a <strong>developer preview</strong>.
-  </p>
 
-  <div class="box">
-    <h3>Try Flux Locally</h3>
-    <p>Flux is a desktop app. To try it:</p>
-    <pre>
-git clone https://github.com/Flux3tor/flux-browser.git
+<body>
+  <div class="wrap">
+    <h1>Flux Browser</h1>
+    <div class="subtitle">
+      Experimental Chromium-based desktop browser focused on UI and system behavior.
+    </div>
+
+    <div class="tags">
+      <div class="tag">Electron</div>
+      <div class="tag">Chromium</div>
+      <div class="tag">UI Systems</div>
+      <div class="tag">Performance</div>
+    </div>
+
+    <section>
+      <h2>Why</h2>
+      <p>
+        Flux is an exploration of how browsers behave under the hood and how small UI
+        decisions affect usability, performance, and interaction flow.
+      </p>
+    </section>
+
+    <section>
+      <h2>What it does</h2>
+      <ul>
+        <li>Real Chromium web rendering</li>
+        <li>Multi-tab browsing with reordering</li>
+        <li>Custom navigation UI</li>
+        <li>Focused, minimal interface</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Status</h2>
+      <p>
+        Flux is currently a <strong>developer preview</strong>.  
+        No installer yet — runs locally via Electron.
+      </p>
+
+      <div class="box">
+git clone https://github.com/flux3tor/flux-browser.git
 cd flux-browser
 npm install
 npm start
-    </pre>
-    <p>
-      View the source code on
-      <a href="https://github.com/Flux3tor/flux-browser" target="_blank">
-        GitHub
-      </a>
-    </p>
-  </div>
+      </div>
+    </section>
 
-  <div class="box">
-    <h3>Status</h3>
-    <p>
-      v0.1 Developer Preview<br />
-      Tabs, navigation, and tab reordering implemented.
-    </p>
+    <section>
+      <h2>Links</h2>
+      <p>
+        <a href="https://github.com/flux3tor/flux-browser" target="_blank">GitHub Repository</a>
+      </p>
+    </section>
   </div>
 </body>
 </html>
