@@ -38,7 +38,129 @@
         align-items: center;
       }
 
-      
+      button {
+        background: #222;
+        color: white;
+        border: none;
+        padding: 6px 10px;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      input {
+        flex: 1;
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: none;
+        outline: none;
+        background: #1e1e26;
+        color: white;
+      }
+
+      webview {
+        width: 100%;
+        height: calc(100vh - 96px);
+        display: none;
+      }
+
+      webview.active {
+        display: flex;
+      }
     </style>
   </head>
+  <body>
+
+    <div id="tabs">
+      <button onclick="newTab()">+</button>
+    </div>
+
+    <div id="toolbar">
+      <button onclick="goBack()">◀</button>
+      <button onclick="goForward()">▶</button>
+      <button onclick="reload()">⟳</button>
+      <input id="url" />
+      <button onclick="navigate()">Go</button>
+    </div>
+
+    <div id="views"></div>
+
+    <script>
+      const tabsBar = document.getElementById("tabs");
+      const views = document.getElementById("views");
+      const urlInput = document.getElementById("url");
+
+      let tabs = [];
+      let activeTab = null;
+
+      function newTab(url = "https://www.google.com") {
+        const tabId = Date.now();
+
+        const tabBtn = document.createElement("div");
+        tabBtn.className = "tab";
+        tabBtn.textContent = "New Tab";
+        tabBtn.onclick = () => switchTab(tabId);
+
+        const webview = document.createElement("webview");
+        webview.src = url;
+
+        webview.addEventListener("page-title-updated", (e) => {
+          tabBtn.textContent = e.title.slice(0, 15);
+        });
+
+        webview.addEventListener("did-navigate-in-page", (e) => {
+          if (activeTab === tabId) urlInput.value = e.url;
+        });
+
+        webview.addEventListener("did-navigate", (e) => {
+          if (activeTab === tabId) urlInput.value = e.url;
+        });
+
+        tabs.push({ id: tabId, tabBtn, webview});
+        tabsBar.appendChild(tabBtn);
+        views.appendChild(webview);
+
+        switchTab(tabId);
+      }
+
+      function switchTab(id) {
+        tabs.forEach(t => {
+          t.tabBtn.classList.remove("active");
+          t.webview.classList.remove("active");
+        });
+
+        const tab = tabs.find(t => t.id === id);
+        if (!tab) return;
+
+        tab.tabBtn.classList.add("active");
+        tab.webview.classList.add("active");
+        activeTab = id;
+        urlInput.value = tab.webview.getURL();
+      }
+
+      function navigate() {
+        const tab = tabs.find(t => t.id === activeTab);
+        let url = urlInput.value.trim();
+        if (!url.startsWith("http")) url = "https://" + url;
+        tab.webview.loadURL(url);
+      }
+
+      function goBack() {
+        const tab = tabs.find(t => t.id === activeTab);
+        if (tab.webview.canGoBack()) tab.webview.goBack();
+      }
+
+      function goForward() {
+        const tab = tabs.find(t => t.id === activeTab);
+        if (tab.webview.canGoForward()) tab.webview.goForward();
+      }
+
+      function reload() {
+        const tab = tabs.find(t => t.id === activeTab);
+        tab.webview.reload();
+      }
+
+      newTab();
+    </script>
+    
+  </body>
 </html>
