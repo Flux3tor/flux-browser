@@ -19,15 +19,28 @@
       }
 
       .tab {
+        display: flex;
+        align-items: center;
+        gap: 6px;
         padding: 6px 10px;
         background: #1e1e26;
         border-radius: 6px;
         cursor: pointer;
         font-size: 13px;
+        user-select: none;
       }
 
       .tab.active {
         background: #2b2b38;
+      }
+
+      .tab .close {
+        opacity: 0.6;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .tab .close:hover {
+        opacity: 1;
       }
 
       #toolbar {
@@ -97,30 +110,64 @@
 
         const tabBtn = document.createElement("div");
         tabBtn.className = "tab";
-        tabBtn.textContent = "New Tab";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = "New Tab";
+
+        const closeBtn = document.createElement("span");
+        closeBtn.textContent = "x";
+        closeBtn.className = "close";
+
+        closeBtn.onclick = (e) => {
+          e.stopPropagation();
+          closeTab(tabId);
+        };
+
         tabBtn.onclick = () => switchTab(tabId);
 
-        const webview = document.createElement("webview");
+        tabBtn.appendChild(titleSpan);
+        tabBtn.appendChild(closeBtn);
+
+        const webview= document.createElement("webview");
         webview.src = url;
 
         webview.addEventListener("page-title-updated", (e) => {
-          tabBtn.textContent = e.title.slice(0, 15);
-        });
-
-        webview.addEventListener("did-navigate-in-page", (e) => {
-          if (activeTab === tabId) urlInput.value = e.url;
+          titleSpan.textContent = e.title.slice(0, 15);
         });
 
         webview.addEventListener("did-navigate", (e) => {
           if (activeTab === tabId) urlInput.value = e.url;
         });
 
-        tabs.push({ id: tabId, tabBtn, webview});
-        tabsBar.appendChild(tabBtn);
+        webview.addEventListener("did-navigate-in-page", (e) => {
+          if (activeTab === tabId) urlInput.value = e.url;
+        });
+
+        tabs.push({ id: tabId, tabBtn, webview });
+        tabsBar.appendChild(tabBtn)
         views.appendChild(webview);
 
         switchTab(tabId);
       }
+
+      function closeTab(id) {
+        if (tabs.length === 1) return; // 🚫 never close last tab
+
+        const index = tabs.findIndex(t => t.id === id);
+        if (index === -1) return;
+
+        const tab = tabs[index];
+
+        tab.webview.remove();
+        tab.tabBtn.remove();
+        tabs.splice(index, 1);
+
+        if (activeTab === id) {
+          const nextTab = tabs[index] || tabs[index - 1];
+          switchTab(nextTab.id);
+        }
+      }
+
 
       function switchTab(id) {
         tabs.forEach(t => {
@@ -161,6 +208,6 @@
 
       newTab();
     </script>
-    
+
   </body>
 </html>
