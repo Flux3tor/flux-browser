@@ -28,6 +28,7 @@
         cursor: pointer;
         font-size: 13px;
         user-select: none;
+        cursor: grab;
       }
 
       .tab.active {
@@ -41,6 +42,11 @@
       }
       .tab .close:hover {
         opacity: 1;
+      }
+
+      .tab.dragging {
+        opacity: 0.5;
+        cursor: grabbing;
       }
 
       #toolbar {
@@ -114,6 +120,7 @@
 
         const tabBtn = document.createElement("div");
         tabBtn.className = "tab";
+        tabBtn.draggable = true;
 
         const titleSpan = document.createElement("span");
         titleSpan.textContent = "New Tab";
@@ -154,25 +161,6 @@
         switchTab(tabId);
       }
 
-      function closeTab(id) {
-        if (tabs.length === 1) return; // 🚫 never close last tab
-
-        const index = tabs.findIndex(t => t.id === id);
-        if (index === -1) return;
-
-        const tab = tabs[index];
-
-        tab.webview.remove();
-        tab.tabBtn.remove();
-        tabs.splice(index, 1);
-
-        if (activeTab === id) {
-          const nextTab = tabs[index] || tabs[index - 1];
-          switchTab(nextTab.id);
-        }
-      }
-
-
       function switchTab(id) {
         tabs.forEach(t => {
           t.tabBtn.classList.remove("active");
@@ -209,6 +197,63 @@
         const tab = tabs.find(t => t.id === activeTab);
         tab.webview.reload();
       }
+
+      function closeTab(id) {
+        if (tabs.length === 1) return; // 🚫 never close last tab
+
+        const index = tabs.findIndex(t => t.id === id);
+        if (index === -1) return;
+
+        const tab = tabs[index];
+
+        tab.webview.remove();
+        tab.tabBtn.remove();
+        tabs.splice(index, 1);
+
+        if (activeTab === id) {
+          const nextTab = tabs[index] || tabs[index - 1];
+          switchTab(nextTab.id);
+        }
+      }
+
+      let draggedTabId = null;
+
+      tabsBar.addEventListener("dragstart", (e) => {
+        const tabEl = e.target.closest(".tab");
+        if (!tabEl) return;
+
+        draggedTabId = tabs.find(t => t.tabBtn === tabEl)?.id;
+        tabEl.classList.add("dragging")
+      });
+
+      tabsBar.addEventListener("dragend", (e) => {
+        const tabEl = e.target.closest(".tab");
+        if (tabEl) tabEl.classList.remove("dragging");
+        draggedTabId = null;
+      });
+
+      tabsBar.addEventListener("dragover", (e) => {
+        e.preventDefault();
+
+        const targetTab = e.target.closest(".tab");
+        if (!targetTab || draggedTabId === null) return;
+
+        const draggedTab = tabs.find(t => t.id === draggedTabId);
+        const targetIndex = tabs.findIndex(t => t.tabBtn === targetTab);
+        const draggedIndex = tabs.findIndex(t => t.id === draggedTabId);
+
+        if (draggedIndex === targetIndex) return;
+
+        // Reorder Array
+        tabs.splice(draggedIndex, 1);
+        tabs.splice(targetIndex, 0, draggedTab);
+
+        // Reorder DOM
+        tabsBar.insertBefore(
+          draggedTab.tabBtn,
+          tabsBar.children[targetIndex + 1] // +1 because "+" button exists
+        );
+      });
 
       newTab();
     </script>
