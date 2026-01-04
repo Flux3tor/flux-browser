@@ -18,23 +18,19 @@
   "build": {
     "appId": "dev.flux3tor.fluxbrowser",
     "productName": "Flux Browser",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "**/*",
-      "!dist/**"
-    ],
+    "asar": true,
     "win": {
-      "target": "portable",
       "icon": "assets/icon.ico",
-      "forceCodeSigning": false
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
+      "allowToChangeInstallationDirectory": true
     }
   }
 }
