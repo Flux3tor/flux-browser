@@ -1,13 +1,14 @@
 {
   "name": "flux-browser",
+  "productName": "Flux Browser",
   "version": "1.0.0",
-  "description": "",
+  "description": "Experimental Chromium-based browser focused on UI and system behavior",
   "main": "main.js",
   "scripts": {
    "start": "electron ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Flux3tor",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
