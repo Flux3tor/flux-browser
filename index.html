@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <title>Flux Browser</title>
     <style>
+      :root {
+        --bg: #0b0e14;
+        --panel: #111528;
+        --panel-soft: #0f1324;
+        --border: rgba(255,255,255,0.06);
+
+        --text: #e6e8ee;
+        --muted: #9aa1b2;
+
+        --accent: #8b5cf6;
+        --accent-soft: rgba(139,92,246,0.15);
+      }
+      
       body {
         margin: 0;
         background: #0f0f14;
@@ -23,7 +36,9 @@
         align-items: center;
         gap: 6px;
         padding: 6px 10px;
-        background: #1e1e26;
+        background: var(--panel-soft);
+        border: 1px solid var(--border);
+        color: var(--text);
         border-radius: 6px;
         cursor: pointer;
         font-size: 13px;
@@ -31,8 +46,14 @@
         cursor: grab;
       }
 
+      .tabs {
+        background: linear-gradient(180deg, var(--panel), var(--bg));
+        border-bottom: 1px solid var(--border);
+      }
+
       .tab.active {
-        background: #2b2b38;
+        border-color: var(--accent);
+        background: rgba(139,92,246,0.12);
       }
 
       .tab .close {
@@ -58,22 +79,31 @@
       }
 
       button {
-        background: #222;
-        color: white;
-        border: none;
+        background: var(--panel-soft);
+        color: var(--text);
+        border: 1px solid var(--border);
         padding: 6px 10px;
         cursor: pointer;
         border-radius: 6px;
+      }
+
+      button:hover {
+        border-color: var(--accent);
       }
 
       input {
         flex: 1;
         padding: 6px 10px;
         border-radius: 6px;
-        border: none;
+        border: 1px solid var(--border);
         outline: none;
-        background: #1e1e26;
-        color: white;
+        background: var(--panel-soft);
+        color: var(--text);
+      }
+      
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
       }
 
       webview {
