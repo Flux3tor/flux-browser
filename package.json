@@ -1,17 +1,40 @@
 {
   "name": "flux-browser",
   "productName": "Flux Browser",
-  "version": "1.0.0",
-  "description": "Experimental Chromium-based browser focused on UI and system behavior",
+  "version": "0.2.0",
+  "description": "Experimental Chromium-based browser focused on UI, privacy, and system behavior",
   "main": "main.js",
-  "scripts": {
-   "start": "electron ."
-  },
-  "keywords": [],
   "author": "Flux3tor",
   "license": "ISC",
   "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
   "devDependencies": {
-    "electron": "^39.2.7"
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "dev.flux3tor.fluxbrowser",
+    "productName": "Flux Browser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/icon.ico",
+      "forceCodeSigning": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
